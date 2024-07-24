@@ -9,8 +9,8 @@ export default function Register() {
     const last_name = useRef()
     const email = useRef()
     const password = useRef()
-    const password2 = useRef(undefined)
-
+    const password2 = useRef()
+    const walletAddress = useRef() // New ref for Ethereum wallet address
 
     async function onSubmitForm(event) {
         event.preventDefault()
@@ -19,16 +19,15 @@ export default function Register() {
             last_name: last_name.current.value,
             email: email.current.value,
             password: password.current.value,
-            password2: password2.current.value
-          };
+            password2: password2.current.value,
+            ethereum_wallet_address: walletAddress.current.value // Include wallet address
+        };
 
         setLoading(true)
 
         try {
-            const response = await axiosInstance.post('auth/register', JSON.stringify(data))
-
+            await axiosInstance.post('auth/register', JSON.stringify(data))
             setLoading(false)
-
             navigate('/auth/login')
         } catch (error) {
             setLoading(false)
@@ -54,6 +53,9 @@ export default function Register() {
                 </div>
                 <div className="mb-3">
                     <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control' id="passwordConfirmation" ref={password2} />
+                </div>
+                <div className="mb-3">
+                    <input type="text" placeholder='Ethereum Wallet Address' autoComplete='off' className='form-control' id="walletAddress" ref={walletAddress} />
                 </div>
                 <div className="mb-3">
                     <button disabled={loading} className='btn btn-success' type="submit">Register</button>
